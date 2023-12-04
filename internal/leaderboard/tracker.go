@@ -60,3 +60,26 @@ func (t *Tracker) CheckForNewStars() ([]string, error) {
 
 	return newStars, nil
 }
+
+func (t *Tracker) CheckForNewMembers() ([]string, error) {
+
+	leaderboard, err := t.GetLeaderboard()
+	if err != nil {
+		return nil, err
+	}
+
+	t.PreviousLeaderboard = t.CurrentLeaderboard
+	t.CurrentLeaderboard = leaderboard
+
+	var newMembers []string
+
+	for memberID, member := range leaderboard.Members {
+
+		_, ok := t.PreviousLeaderboard.Members[memberID]
+		if !ok {
+			newMembers = append(newMembers, member.Name)
+		}
+	}
+
+	return newMembers, nil
+}

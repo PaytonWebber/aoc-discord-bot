@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -33,8 +34,45 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	formattedLeaderboard := leaderboard.FormatLeaderboard(tracker.CurrentLeaderboard)
-	discord.SendChannelMessage(bot.Session, cfg.ChannelID, formattedLeaderboard)
+	ticker := time.NewTicker(5 * time.Minute) // Set the interval
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				stars, err := tracker.CheckForNewStars()
+				if err != nil {
+					log.Printf("Error checking for new stars: %v", err)
+					continue
+				}
+
+				members, err := tracker.CheckForNewMembers()
+				if err != nil {
+					log.Printf("Error checking for new members: %v", err)
+					continue
+				}
+
+				if len(members) > 0 {
+					for _, name := range members {
+						discord.SendChannelMessage(bot.Session, cfg.ChannelID, name+" joined the leaderboard!")
+					}
+				}
+
+				if len(stars) > 0 {
+					for _, name := range stars {
+						discord.SendChannelMessage(bot.Session, cfg.ChannelID, name+" got a star!")
+					}
+				}
+
+				if len(stars) > 0 || len(members) > 0 {
+					formattedLeaderboard := leaderboard.FormatLeaderboard(tracker.CurrentLeaderboard)
+					discord.SendChannelMessage(bot.Session, cfg.ChannelID, formattedLeaderboard)
+				}
+			}
+		}
+	}()
+
+	bot.Start()
 
 	<-signals
 

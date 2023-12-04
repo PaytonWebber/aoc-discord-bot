@@ -32,7 +32,7 @@ func FormatLeaderboard(leaderboard *aoc.Leaderboard) string {
 			rank = i + 1
 			prevScore = member.LocalScore
 		}
-		line := fmt.Sprintf("%d. %s - %d points\n", rank, member.Name, member.LocalScore)
+		line := fmt.Sprintf("%d. %s - %d points (%d stars)\n", rank, member.Name, member.LocalScore, member.Stars)
 		sb.WriteString(line)
 	}
 

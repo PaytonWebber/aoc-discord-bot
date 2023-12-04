@@ -1,4 +1,5 @@
 .env
+main
 
 # Binaries for programs and plugins
 *.exe
