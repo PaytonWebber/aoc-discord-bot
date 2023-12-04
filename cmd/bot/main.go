@@ -34,7 +34,7 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	ticker := time.NewTicker(5 * time.Minute) // Set the interval
+	ticker := time.NewTicker(15 * time.Minute) // Set the interval
 
 	go func() {
 		for {
