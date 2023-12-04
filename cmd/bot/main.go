@@ -2,6 +2,7 @@ package main
 
 import (
 	"AocDiscordBot/internal/config"
+	"AocDiscordBot/internal/discord"
 	"AocDiscordBot/internal/leaderboard"
 
 	"log"
@@ -19,6 +20,11 @@ func main() {
 		log.Fatal("cfg is nil")
 	}
 
+	bot := discord.NewBot(cfg.DiscordToken)
+	if bot == nil {
+		log.Fatal("bot is nil")
+	}
+
 	tracker := leaderboard.NewTracker(cfg)
 	if tracker == nil {
 		log.Fatal("tracker is nil")
@@ -27,25 +33,16 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	newStars, err := tracker.CheckForNewStars()
-	if err != nil {
-		log.Fatalf("error checking for new stars: %v", err)
-	}
-
-	if len(newStars) > 0 {
-		log.Printf("new stars: %v", newStars)
-	}
-
-	for _, member := range tracker.CurrentLeaderboard.Members {
-		log.Printf("Name: %s, Stars: %d Local Score: %d", member.Name, member.Stars, member.LocalScore)
-	}
+	formattedLeaderboard := leaderboard.FormatLeaderboard(tracker.CurrentLeaderboard)
+	discord.SendChannelMessage(bot.Session, cfg.ChannelID, formattedLeaderboard)
 
 	<-signals
 
-	shutdown()
+	shutdown(bot)
 }
 
-func shutdown() {
+func shutdown(bot *discord.Bot) {
 	log.Println("shutting down")
+	bot.Session.Close()
 	os.Exit(0)
 }
