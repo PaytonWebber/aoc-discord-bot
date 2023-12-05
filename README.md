@@ -3,7 +3,7 @@
 <h3 align="center">AocDiscordBot</h3>
 
   <p align="center">
-  A Discord bot designed to monitor and track progress on a private Advent of Code (AOC) leaderboard. It automatically fetches updates and notifies members when someone on the leaderboard earns a new star.
+  A Discord bot designed to monitor and track progress on a private Advent of Code (AOC) leaderboard. It automatically fetches and checks for updates, then notifies members when someone on the leaderboard earns a new star.
   </p>
 </div>
 
@@ -29,7 +29,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The AocDiscordBot is a specialized Discord bot designed to enhance the experience of participating in the Advent of Code (AOC) challenges among a private group or community. Advent of Code is an annual series of programming puzzles that span a variety of skill sets and challenge types
+The AocDiscordBot is a specialized Discord bot designed to enhance the experience of participating in the Advent of Code (AOC) challenges among a private group or community. Advent of Code is an annual series of programming puzzles that span a variety of skill sets and challenge types.
 
 Key Features:
 
@@ -43,7 +43,7 @@ Key Features:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+To add this bot to your own server, follow these steps.
 
 ### Prerequisites
 
