@@ -39,6 +39,7 @@ Key Features:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -75,9 +76,10 @@ You need to create your own Discord app through their [Devloper Portal](https://
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Currently, the bot is mostly autonomous, and will send updates to a specified channel when a player gets a star. You can manually check the leaderboard status using the !leaderboard command.
+Currently, the bot is mostly autonomous. You can manually check the leaderboard status using the !leaderboard command.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
