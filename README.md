@@ -51,7 +51,7 @@ You need to create your own Discord app through their [Devloper Portal](https://
 
 ### Installation
 
-1. Clone the reop
+1. Clone the repo
 
    ```sh
    git clone https://github.com/PaytonWebber/AocDiscordBot.git
