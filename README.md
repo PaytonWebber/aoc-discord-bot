@@ -52,25 +52,34 @@ You need to create your own Discord app through their [Devloper Portal](https://
 ### Installation
 
 1. Clone the reop
+
    ```sh
    git clone https://github.com/PaytonWebber/AocDiscordBot.git
    ```
+
 2. Create a .env file at the root of the repo
+
    ```sh
    touch .env
    ```
-3. Enter your Advent of Code SESSION COOKIE, Leaderboard ID, Discord Bot Token, and the Channel ID you wish to update and monitor in the .env you just created
+
+3. Enter the following information in the .env file you just created
+
    ```ini
    SESSION_COOKIE="<YOUR COOKIE>"
    LEADERBOARD_ID="<YOUR LEADERBOARD ID>"
    DISCORD_TOKEN="<YOUR BOT's TOKEN>"
    CHANNEL_ID="<THE CHANNEL YOU WANT THE BOT TO MONITOR>"
    ```
+
 4. Build the project
+
    ```sh
    go build cmd/bot/main.go
    ```
+
 5. Start the bot
+
    ```sh
    ./main
 
