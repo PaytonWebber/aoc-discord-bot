@@ -33,11 +33,9 @@ The AocDiscordBot is a specialized Discord bot designed to enhance the experienc
 
 Key Features:
 
-* Automated Updates: The bot automatically fetches the latest scores and achievements from the Advent of Code leaderboard.
+* Automated Updates: The bot automatically fetches the latest stars and scores from the Advent of Code leaderboard.
 
 * Real-Time Notifications: Members are notified in Discord when someone on the leaderboard earns a new star, keeping everyone up-to-date and engaged.
-
-* User-Friendly Interface: Simple commands and an intuitive interface make it easy for all members, regardless of their technical background, to interact with the bot and stay informed about the leaderboard status.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
