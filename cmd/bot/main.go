@@ -102,10 +102,16 @@ func main() {
 	// Wait for an interrupt signal to shutdown
 	<-signals
 
-	finalLeaderboard, err := tracker.GetLeaderboard()
+	// Do a final check for updates before shutting down
+	hadUpdates, err = bot.CheckForUpdates()
 	if err != nil {
 		log.Printf("Error getting final leaderboard: %v", err)
 	}
+	if !hadUpdates {
+		log.Printf("no updates")
+	}
+
+	finalLeaderboard := bot.Tracker.CurrentLeaderboard
 
 	shutdown(session, finalLeaderboard)
 }
