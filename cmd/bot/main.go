@@ -71,10 +71,15 @@ func main() {
 		log.Fatalf("error opening connection: %v", err)
 	}
 
+	var hadUpdates bool
+
 	// Check for updates on startup to see if any updates happened while the bot was offline
-	err = bot.CheckForUpdates()
+	hadUpdates, err = bot.CheckForUpdates()
 	if err != nil {
 		log.Printf("error checking for updates: %v", err)
+	}
+	if !hadUpdates {
+		log.Printf("no updates")
 	}
 
 	// Check for updates every 15 minutes
@@ -83,9 +88,12 @@ func main() {
 		for {
 			select {
 			case <-ticker.C:
-				err := bot.CheckForUpdates()
+				hadUpdates, err := bot.CheckForUpdates()
 				if err != nil {
 					log.Printf("error checking for updates: %v", err)
+				}
+				if !hadUpdates {
+					log.Printf("no updates")
 				}
 			}
 		}

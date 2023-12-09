@@ -23,16 +23,16 @@ func NewBotHandler(session *discordgo.Session, tracker *leaderboard.Tracker, cfg
 	}
 }
 
-func (bh *BotHandler) CheckForUpdates() error {
+func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	log.Println("Checking for updates...")
 	newStars, err := bh.Tracker.CheckForNewStars()
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	newMembers, err := bh.Tracker.CheckForNewMembers()
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	if len(newStars) > 0 {
@@ -55,7 +55,7 @@ func (bh *BotHandler) CheckForUpdates() error {
 		bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
 	}
 
-	return nil
+	return false, nil
 }
 
 func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -66,15 +66,15 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 	// Check if the message is "!leaderboard" command
 	if strings.ToLower(m.Content) == "!leaderboard" {
 		log.Println("Leaderboard command received")
-
-		// Get the leaderboard
-		lb, err := bh.Tracker.GetLeaderboard()
+		hadUpdates, err := bh.CheckForUpdates()
 		if err != nil {
-			log.Printf("error getting leaderboard: %v", err)
-			return
+			log.Printf("error checking for updates: %v", err)
 		}
-		formattedLeaderboard := leaderboard.FormatLeaderboard(lb)
-		bh.SendChannelMessageEmbed(m.ChannelID, formattedLeaderboard)
+
+		if !hadUpdates {
+			formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
+			bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
+		}
 	}
 }
 
