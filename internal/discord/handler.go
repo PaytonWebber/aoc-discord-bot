@@ -68,7 +68,12 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 		log.Println("Leaderboard command received")
 
 		// Get the leaderboard
-		formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
+		lb, err := bh.Tracker.GetLeaderboard()
+		if err != nil {
+			log.Printf("error getting leaderboard: %v", err)
+			return
+		}
+		formattedLeaderboard := leaderboard.FormatLeaderboard(lb)
 		bh.SendChannelMessageEmbed(m.ChannelID, formattedLeaderboard)
 	}
 }
