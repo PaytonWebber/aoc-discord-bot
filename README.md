@@ -3,7 +3,7 @@
 <h3 align="center">AocDiscordBot</h3>
 
   <p align="center">
-  A Discord bot designed to monitor and track progress on a private Advent of Code (AOC) leaderboard. It automatically fetches and checks for updates, then notifies members when someone on the leaderboard earns a new star.
+  A Discord bot designed to monitor a private Advent of Code (AoC) leaderboard. It automatically fetches and checks for updates, then notifies members when someone on the leaderboard earns a new star, or when a new member has joined.
   </p>
 </div>
 
@@ -29,7 +29,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The AocDiscordBot is a specialized Discord bot designed to enhance the experience of participating in the Advent of Code (AOC) challenges among a private group or community. Advent of Code is an annual series of programming puzzles that span a variety of skill sets and challenge types.
+The AocDiscordBot is a specialized Discord bot designed to enhance the experience of participating in the Advent of Code (AoC) challenges among a private group. Advent of Code is an annual series of programming puzzles that span a variety of skill sets and challenge types. The bot is designed for small, personal servers and can easily be self-hosted. I am currently running this bot on my Raspberry Pi 4.
 
 Key Features:
 
@@ -75,13 +75,14 @@ You need to create your own Discord app through their [Devloper Portal](https://
 4. Build the project
 
    ```sh
-   go build cmd/bot/main.go
+   make
    ```
 
 5. Start the bot
 
    ```sh
-   ./main
+   ./bot
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
