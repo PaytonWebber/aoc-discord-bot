@@ -49,6 +49,10 @@ To add this bot to your own server, follow these steps.
 
 You need to create your own Discord app through their [Devloper Portal](https://discord.com/developers/docs/intro)
 
+Make sure to enable **MESSAGE CONTENT INTENT** for the bot:
+
+![image](images/bot_message_content.png)
+
 ### Installation
 
 1. Clone the repo
@@ -90,6 +94,12 @@ You need to create your own Discord app through their [Devloper Portal](https://
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Currently, the bot is mostly autonomous. You can manually check the leaderboard status using the !leaderboard command.
+The bot is mostly autonomous, but can be interacted with using the following commands:
+
+![image](images/help_command.png)
+
+![image](images/leaderboard_command.png)
+
+![image](images/stars_command.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
