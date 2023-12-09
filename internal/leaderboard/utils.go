@@ -68,14 +68,11 @@ func FormatStars(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
 	var sb strings.Builder
 
 	maxDays := 0
+	longestNameLength := 0
 	for _, member := range members {
 		if len(member.CompletionDayLevels) > maxDays {
 			maxDays = len(member.CompletionDayLevels)
 		}
-	}
-
-	longestNameLength := 0
-	for _, member := range members {
 		if len(member.Name) > longestNameLength {
 			longestNameLength = len(member.Name)
 		}
