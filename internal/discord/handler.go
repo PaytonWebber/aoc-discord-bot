@@ -66,7 +66,6 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 		return
 	}
 
-	// Check if the message is "!leaderboard" command
 	if strings.ToLower(m.Content) == "!leaderboard" {
 		log.Println("Leaderboard command received")
 		hadUpdates, err := bh.CheckForUpdates()
@@ -78,6 +77,12 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 			formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
 			bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
 		}
+	}
+
+	if strings.ToLower(m.Content) == "!stars" {
+		log.Println("Stars command received")
+		embed := leaderboard.FormatStars(bh.Tracker.CurrentLeaderboard)
+		bh.SendChannelMessageEmbed(bh.cfg.ChannelID, embed)
 	}
 }
 

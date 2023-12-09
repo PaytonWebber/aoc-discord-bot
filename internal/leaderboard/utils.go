@@ -52,6 +52,76 @@ func FormatLeaderboard(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
 	return embed
 }
 
+func FormatStars(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
+
+	// Convert map to a slice for sorting
+	members := make([]aoc.Member, 0, len(leaderboard.Members))
+	for _, member := range leaderboard.Members {
+		members = append(members, member)
+	}
+
+	// Sort by local score
+	sort.Slice(members, func(i, j int) bool {
+		return members[i].LocalScore > members[j].LocalScore
+	})
+
+	var sb strings.Builder
+
+	maxDays := 0
+	for _, member := range members {
+		if len(member.CompletionDayLevels) > maxDays {
+			maxDays = len(member.CompletionDayLevels)
+		}
+	}
+
+	longestNameLength := 0
+	for _, member := range members {
+		if len(member.Name) > longestNameLength {
+			longestNameLength = len(member.Name)
+		}
+	}
+
+	sb.WriteString("Day")
+	for i := 1; i <= maxDays; i++ {
+		sb.WriteString(fmt.Sprintf(" %2d", i))
+	}
+
+	for _, member := range members {
+		sb.WriteString("\n")
+		sb.WriteString("    ")
+		for i := 1; i <= maxDays; i++ {
+			stars := 0
+			day, exists := member.CompletionDayLevels[fmt.Sprint(i)]
+			if exists {
+				if day.Level2 != nil {
+					stars++
+				}
+				if day.Level1 != nil {
+					stars++
+				}
+			}
+
+			switch stars {
+			case 2:
+				sb.WriteString(" ★ ")
+			case 1:
+				sb.WriteString(" ☆ ")
+			default:
+				sb.WriteString("   ")
+			}
+		}
+		sb.WriteString(fmt.Sprintf(" %-*s", longestNameLength, member.Name))
+	}
+
+	embed := &discordgo.MessageEmbed{
+		Title:       "Advent of Code Leaderboard",
+		Description: "```" + sb.String() + "```",
+		Color:       0x00FF00,
+	}
+
+	return embed
+}
+
 func StoreLeaderboard(leaderboard *aoc.Leaderboard) error {
 	file, err := os.Create("leaderboard.json")
 	if err != nil {
