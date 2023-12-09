@@ -75,13 +75,14 @@ You need to create your own Discord app through their [Devloper Portal](https://
 4. Build the project
 
    ```sh
-   go build cmd/bot/main.go
+   make
    ```
 
 5. Start the bot
 
    ```sh
-   ./main
+   ./bot
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
