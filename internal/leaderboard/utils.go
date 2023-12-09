@@ -116,7 +116,7 @@ func FormatStars(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
 	embed := &discordgo.MessageEmbed{
 		Title:       "AoC Stars:",
 		Description: "```" + sb.String() + "```",
-		Color:       0xB11E31,
+		Color:       0xB22222,
 	}
 
 	return embed

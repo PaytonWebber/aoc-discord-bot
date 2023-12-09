@@ -66,23 +66,36 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 		return
 	}
 
-	if strings.ToLower(m.Content) == "!leaderboard" {
-		log.Println("Leaderboard command received")
+	if strings.ToLower(m.Content) == "!update" {
+		log.Println("Update command received")
 		hadUpdates, err := bh.CheckForUpdates()
 		if err != nil {
 			log.Printf("error checking for updates: %v", err)
 		}
-
 		if !hadUpdates {
-			formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
-			bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
+			bh.SendChannelMessage(bh.cfg.ChannelID, "No updates")
 		}
-	}
 
-	if strings.ToLower(m.Content) == "!stars" {
+	} else if strings.ToLower(m.Content) == "!leaderboard" {
+		log.Println("Leaderboard command received")
+		formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
+		bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
+
+	} else if strings.ToLower(m.Content) == "!stars" {
 		log.Println("Stars command received")
 		embed := leaderboard.FormatStars(bh.Tracker.CurrentLeaderboard)
 		bh.SendChannelMessageEmbed(bh.cfg.ChannelID, embed)
+
+	} else if strings.ToLower(m.Content) == "!help" {
+		sb := strings.Builder{}
+		sb.WriteString("```")
+		sb.WriteString("Commands:\n\n")
+		sb.WriteString("!leaderboard - Shows the current leaderboard\n\n")
+		sb.WriteString("!update - Checks for updates and shows the updated leaderboard\n\n")
+		sb.WriteString("!stars - Shows the current stars\n\n")
+		sb.WriteString("!help - Shows this message\n")
+		sb.WriteString("```")
+		bh.SendChannelMessage(bh.cfg.ChannelID, sb.String())
 	}
 }
 
