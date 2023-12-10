@@ -32,19 +32,23 @@ func (t *Tracker) GetLeaderboard() (*aoc.Leaderboard, error) {
 	return leaderboard, nil
 }
 
-func (t *Tracker) CheckForNewStars() ([]string, error) {
+func (t *Tracker) UpdateLeaderboard() error {
 	leaderboard, err := t.GetLeaderboard()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	t.PreviousLeaderboard = t.CurrentLeaderboard
 	t.CurrentLeaderboard = leaderboard
 
+	return nil
+}
+
+func (t *Tracker) CheckForNewStars() ([]string, error) {
 	var newStars []string
 
 	// TODO: Get the new star data from the current leaderboard
-	for memberID, member := range leaderboard.Members {
+	for memberID, member := range t.CurrentLeaderboard.Members {
 		previousMember, ok := t.PreviousLeaderboard.Members[memberID]
 		if !ok {
 			continue

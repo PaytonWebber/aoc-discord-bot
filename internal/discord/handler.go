@@ -27,6 +27,8 @@ func NewBotHandler(session *discordgo.Session, tracker *leaderboard.Tracker, cfg
 func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	log.Println("Checking for updates...")
 	bh.Tracker.LastUpdate = time.Now()
+	bh.Tracker.UpdateLeaderboard()
+
 	hadUpdates := false
 	newStars, err := bh.Tracker.CheckForNewStars()
 	if err != nil {
