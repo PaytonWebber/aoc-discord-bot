@@ -25,6 +25,8 @@ func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
 		return nil, fmt.Errorf("error reading request: %w", err)
 	}
 
+	req.Header.Set("User-Agent", "github.com/PaytonWebber/AocDiscordBot by paytonwebber@gmail.com")
+
 	req.Header.Set("cookie", fmt.Sprintf("session=%s", c.SessionCookie))
 
 	client := &http.Client{}

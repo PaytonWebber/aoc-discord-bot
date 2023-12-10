@@ -4,6 +4,7 @@ import (
 	"AocDiscordBot/internal/aoc"
 	"AocDiscordBot/internal/config"
 	"log"
+	"time"
 )
 
 type Tracker struct {
@@ -11,6 +12,7 @@ type Tracker struct {
 	CurrentLeaderboard  *aoc.Leaderboard
 	Client              *aoc.Client
 	Config              *config.Config
+	LastUpdate          time.Time
 }
 
 func NewTracker(cfg *config.Config, StoredLeaderboard *aoc.Leaderboard) *Tracker {

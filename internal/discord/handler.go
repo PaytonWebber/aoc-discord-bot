@@ -7,6 +7,7 @@ import (
 
 	"log"
 	"strings"
+	"time"
 )
 
 type BotHandler struct {
@@ -25,6 +26,7 @@ func NewBotHandler(session *discordgo.Session, tracker *leaderboard.Tracker, cfg
 
 func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	log.Println("Checking for updates...")
+	bh.Tracker.LastUpdate = time.Now()
 	hadUpdates := false
 	newStars, err := bh.Tracker.CheckForNewStars()
 	if err != nil {
@@ -68,14 +70,17 @@ func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.Message
 
 	if strings.ToLower(m.Content) == "!update" {
 		log.Println("Update command received")
-		hadUpdates, err := bh.CheckForUpdates()
-		if err != nil {
-			log.Printf("error checking for updates: %v", err)
+		if time.Since(bh.Tracker.LastUpdate).Minutes() > (15 * time.Minute).Minutes() {
+			hadUpdates, err := bh.CheckForUpdates()
+			if err != nil {
+				log.Printf("error checking for updates: %v", err)
+			}
+			if !hadUpdates {
+				bh.SendChannelMessage(bh.cfg.ChannelID, "No updates")
+			}
+		} else {
+			bh.SendChannelMessage(bh.cfg.ChannelID, "You can only update once every 15 minutes")
 		}
-		if !hadUpdates {
-			bh.SendChannelMessage(bh.cfg.ChannelID, "No updates")
-		}
-
 	} else if strings.ToLower(m.Content) == "!leaderboard" {
 		log.Println("Leaderboard command received")
 		formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
