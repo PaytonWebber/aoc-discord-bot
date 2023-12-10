@@ -103,3 +103,9 @@ The bot is mostly autonomous, but can be interacted with using the following com
 ![image](images/stars_command.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## License
+
+[MIT](LICENSE)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
