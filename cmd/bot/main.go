@@ -17,113 +17,117 @@ import (
 )
 
 func main() {
-	// Get the config from .env file
-	cfg := config.NewConfig()
+	cfg := loadConfig()
+
+	session := createDiscordSession(cfg)
+
+	storedLeaderboard := getLeaderboard(cfg)
+
+	tracker := initTracker(cfg, storedLeaderboard)
+
+	bot := initBotHandler(session, tracker, cfg)
+
+	session.AddHandler(bot.MessageRecieved)
+
+	setupSignalHandling(session, bot)
+}
+
+func loadConfig() *config.Config {
+	cfg := config.NewTestConfig()
 	if cfg == nil {
 		log.Fatal("cfg is nil")
 	}
+	return cfg
+}
 
-	// Create a new Discord session using the provided bot token.
+func createDiscordSession(cfg *config.Config) *discordgo.Session {
 	session, err := discordgo.New("Bot " + cfg.DiscordToken)
 	if err != nil {
 		log.Fatalf("error creating discord session: %v", err)
 	}
+	err = session.Open()
+	if err != nil {
+		log.Fatalf("error opening connection to discord: %v", err)
+	}
+	return session
+}
 
-	// Get the leaderboard from file or AoC
-	var storedLeaderboard *aoc.Leaderboard
+func getLeaderboard(cfg *config.Config) *aoc.Leaderboard {
 	file, err := os.Open("leaderboard.json")
 	if err != nil || file == nil {
 		log.Printf("error opening leaderboard file: %v", err)
 		log.Printf("getting leaderboard from AoC")
 		client := aoc.NewClient(cfg.SessionCookie)
-		storedLeaderboard, err = client.GetLeaderboard(cfg.LeaderboardID)
-	} else {
-		storedLeaderboard, err = leaderboard.GetLeaderboardFromFile(file)
-		if err != nil {
-			log.Printf("error getting leaderboard from file: %v", err)
-		} else {
-			log.Printf("got leaderboard from file")
-		}
+		storedLeaderboard, err := client.GetLeaderboard(cfg.LeaderboardID)
+		return handleLeaderboardError(storedLeaderboard, err)
 	}
+	storedLeaderboard, err := leaderboard.GetLeaderboardFromFile(file)
+	return handleLeaderboardError(storedLeaderboard, err)
+}
 
-	// Create the tracker
+func handleLeaderboardError(leaderboard *aoc.Leaderboard, err error) *aoc.Leaderboard {
+	if err != nil {
+		log.Printf("error getting leaderboard: %v", err)
+	}
+	return leaderboard
+}
+
+func initTracker(cfg *config.Config, storedLeaderboard *aoc.Leaderboard) *leaderboard.Tracker {
 	tracker := leaderboard.NewTracker(cfg, storedLeaderboard)
 	if tracker == nil {
 		log.Fatal("tracker is nil")
 	}
+	return tracker
+}
 
-	// Create the bot handler
+func initBotHandler(session *discordgo.Session, tracker *leaderboard.Tracker, cfg *config.Config) *discord.BotHandler {
 	bot := discord.NewBotHandler(session, tracker, cfg)
 	if bot == nil {
 		log.Fatal("botHandler is nil")
 	}
+	checkForUpdates(bot)
+	return bot
+}
 
-	// Register the messageCreate func as a callback for MessageCreate events
-	session.AddHandler(bot.MessageRecieved)
-
-	// Setup exit signal handling to gracefully shutdown
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-
-	// Start the bot
-	err = session.Open()
-	if err != nil {
-		log.Fatalf("error opening connection: %v", err)
-	}
-
-	var hadUpdates bool
-
-	// Check for updates on startup to see if any updates happened while the bot was offline
-	hadUpdates, err = bot.CheckForUpdates()
+func checkForUpdates(bot *discord.BotHandler) {
+	hadUpdates, err := bot.CheckForUpdates()
 	if err != nil {
 		log.Printf("error checking for updates: %v", err)
 	}
 	if !hadUpdates {
 		log.Printf("no updates")
 	}
+}
 
-	// Check for updates every 15 minutes
-	ticker := time.NewTicker(15 * time.Minute)
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				hadUpdates, err := bot.CheckForUpdates()
-				if err != nil {
-					log.Printf("error checking for updates: %v", err)
-				}
-				if !hadUpdates {
-					log.Printf("no updates")
-				}
-			}
-		}
-	}()
+func setupSignalHandling(session *discordgo.Session, bot *discord.BotHandler) {
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+
+	// Start the periodic update check in a goroutine
+	go periodicUpdateCheck(bot)
 
 	// Wait for an interrupt signal to shutdown
 	<-signals
 
-	// Do a final check for updates before shutting down
-	hadUpdates, err = bot.CheckForUpdates()
-	if err != nil {
-		log.Printf("Error getting final leaderboard: %v", err)
-	}
-	if !hadUpdates {
-		log.Printf("no updates")
-	}
-
-	finalLeaderboard := bot.Tracker.CurrentLeaderboard
-
-	shutdown(session, finalLeaderboard)
+	// Perform final actions before shutting down
+	finalShutdownActions(session, bot)
 }
 
-func shutdown(session *discordgo.Session, finalLeaderboard *aoc.Leaderboard) {
+func periodicUpdateCheck(bot *discord.BotHandler) {
+	ticker := time.NewTicker(15 * time.Minute)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			checkForUpdates(bot)
+		}
+	}
+}
+
+func finalShutdownActions(session *discordgo.Session, bot *discord.BotHandler) {
 	log.Printf("Shutting down...")
+	checkForUpdates(bot)
 	session.Close()
 	log.Printf("Session closed")
-	err := leaderboard.StoreLeaderboard(finalLeaderboard)
-	if err != nil {
-		log.Printf("Error storing final leaderboard: %v", err)
-	}
-	log.Printf("Leaderboard stored")
 	os.Exit(0)
 }

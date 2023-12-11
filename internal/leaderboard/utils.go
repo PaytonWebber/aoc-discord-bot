@@ -5,6 +5,7 @@ import (
 
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strings"
@@ -121,6 +122,7 @@ func FormatStars(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
 
 func StoreLeaderboard(leaderboard *aoc.Leaderboard) error {
 	file, err := os.Create("leaderboard.json")
+	log.Println("Storing leaderboard")
 	if err != nil {
 		return fmt.Errorf("error creating leaderboard file: %w", err)
 	}
@@ -142,6 +144,7 @@ func StoreLeaderboard(leaderboard *aoc.Leaderboard) error {
 
 func GetLeaderboardFromFile(file *os.File) (*aoc.Leaderboard, error) {
 	leaderboard, err := os.ReadFile("leaderboard.json")
+	log.Println("Getting leaderboard from file")
 	if err != nil {
 		return nil, fmt.Errorf("error reading leaderboard file: %w", err)
 	}
