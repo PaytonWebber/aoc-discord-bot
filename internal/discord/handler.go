@@ -26,22 +26,23 @@ func NewBotHandler(session *discordgo.Session, tracker *leaderboard.Tracker, cfg
 
 func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	log.Println("Checking for updates...")
+
 	bh.Tracker.LastUpdate = time.Now()
 	bh.Tracker.UpdateLeaderboard()
+	leaderboard.StoreLeaderboard(bh.Tracker.CurrentLeaderboard)
 
 	hadUpdates := false
 	newStars, err := bh.Tracker.CheckForNewStars()
 	if err != nil {
-		return false, err
+		return hadUpdates, err
 	}
 
 	newMembers, err := bh.Tracker.CheckForNewMembers()
 	if err != nil {
-		return false, err
+		return hadUpdates, err
 	}
 
 	if len(newStars) > 0 {
-		hadUpdates = true
 		log.Printf("new stars: %v", newStars)
 		for _, member := range newStars {
 			bh.SendChannelMessage(bh.cfg.ChannelID, member+" got a star!")
@@ -49,7 +50,6 @@ func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	}
 
 	if len(newMembers) > 0 {
-		hadUpdates = true
 		log.Printf("new members: %v", newMembers)
 		bh.SendChannelMessage(bh.cfg.ChannelID, "CHALLENGER APPROACHING!")
 		for _, member := range newMembers {
@@ -58,6 +58,7 @@ func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	}
 
 	if len(newStars) > 0 || len(newMembers) > 0 {
+		hadUpdates = true
 		formattedLeaderboard := leaderboard.FormatLeaderboard(bh.Tracker.CurrentLeaderboard)
 		bh.SendChannelMessageEmbed(bh.cfg.ChannelID, formattedLeaderboard)
 	}
