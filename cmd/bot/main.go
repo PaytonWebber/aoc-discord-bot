@@ -33,7 +33,7 @@ func main() {
 }
 
 func loadConfig() *config.Config {
-	cfg := config.NewTestConfig()
+	cfg := config.NewConfig()
 	if cfg == nil {
 		log.Fatal("cfg is nil")
 	}
