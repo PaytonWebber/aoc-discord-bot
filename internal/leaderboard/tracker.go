@@ -1,8 +1,8 @@
 package leaderboard
 
 import (
-	"github.com/PaytonWebber/AocDiscordBot/internal/aoc"
-	"github.com/PaytonWebber/AocDiscordBot/internal/config"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/aoc"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
 	"log"
 	"time"
 )

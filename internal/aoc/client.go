@@ -18,14 +18,14 @@ func NewClient(sessionCookie string) *Client {
 }
 
 func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
-	url := fmt.Sprintf("https://adventofcode.com/2023/leaderboard/private/view/%s.json", leaderboardID)
+	url := fmt.Sprintf("https://adventofcode.com/2024/leaderboard/private/view/%s.json", leaderboardID)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error reading request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "github.com/PaytonWebber/AocDiscordBot by paytonwebber@gmail.com")
+	req.Header.Set("User-Agent", "github.com/PaytonWebber/aoc-discord-bot by paytonwebber@gmail.com")
 
 	req.Header.Set("cookie", fmt.Sprintf("session=%s", c.SessionCookie))
 

@@ -1,8 +1,8 @@
 package discord
 
 import (
-	"github.com/PaytonWebber/AocDiscordBot/internal/config"
-	"github.com/PaytonWebber/AocDiscordBot/internal/leaderboard"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/leaderboard"
 	"github.com/bwmarrin/discordgo"
 
 	"log"
@@ -66,7 +66,7 @@ func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	return hadUpdates, nil
 }
 
-func (bh *BotHandler) MessageRecieved(s *discordgo.Session, m *discordgo.MessageCreate) {
+func (bh *BotHandler) MessageReceived(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID || m.ChannelID != bh.cfg.ChannelID {
 		return
 	}

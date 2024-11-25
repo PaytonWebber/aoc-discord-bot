@@ -1,7 +1,7 @@
 package leaderboard
 
 import (
-	"github.com/PaytonWebber/AocDiscordBot/internal/aoc"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/aoc"
 
 	"encoding/json"
 	"fmt"

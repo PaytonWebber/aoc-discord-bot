@@ -1,4 +1,4 @@
-module github.com/PaytonWebber/AocDiscordBot
+module github.com/PaytonWebber/aoc-discord-bot
 
 go 1.20
 

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/PaytonWebber/AocDiscordBot/internal/aoc"
-	"github.com/PaytonWebber/AocDiscordBot/internal/config"
-	"github.com/PaytonWebber/AocDiscordBot/internal/discord"
-	"github.com/PaytonWebber/AocDiscordBot/internal/leaderboard"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/aoc"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/discord"
+	"github.com/PaytonWebber/aoc-discord-bot/internal/leaderboard"
 
 	"log"
 	"os"
@@ -27,7 +27,7 @@ func main() {
 
 	bot := initBotHandler(session, tracker, cfg)
 
-	session.AddHandler(bot.MessageRecieved)
+	session.AddHandler(bot.MessageReceived)
 
 	setupSignalHandling(session, bot)
 }
