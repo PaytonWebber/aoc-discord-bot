@@ -7,17 +7,22 @@ import (
 	"time"
 )
 
+type AOCClient interface {
+	GetLeaderboard(leaderboardID string) (*aoc.Leaderboard, error)
+}
+
+// Tracker manages the leaderboard state
 type Tracker struct {
 	PreviousLeaderboard *aoc.Leaderboard
 	CurrentLeaderboard  *aoc.Leaderboard
-	Client              *aoc.Client
+	Client              AOCClient
 	Config              *config.Config
 	LastUpdate          time.Time
 }
 
-func NewTracker(cfg *config.Config, StoredLeaderboard *aoc.Leaderboard) *Tracker {
+func NewTracker(cfg *config.Config, StoredLeaderboard *aoc.Leaderboard, client AOCClient) *Tracker {
 	return &Tracker{
-		Client:             aoc.NewClient(cfg.SessionCookie),
+		Client:             client,
 		Config:             cfg,
 		CurrentLeaderboard: StoredLeaderboard,
 	}

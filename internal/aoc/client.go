@@ -9,12 +9,20 @@ import (
 
 type Client struct {
 	SessionCookie string
+	HTTPClient    *http.Client
 }
 
+// NewClient creates a new AOC client with the provided session cookie.
 func NewClient(sessionCookie string) *Client {
 	return &Client{
 		SessionCookie: sessionCookie,
+		HTTPClient:    http.DefaultClient,
 	}
+}
+
+// For testing purposes, SetHTTPClient allows you to set the HTTP client used by the client.
+func (c *Client) SetHTTPClient(client *http.Client) {
+	c.HTTPClient = client
 }
 
 func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
@@ -22,29 +30,27 @@ func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("error reading request: %w", err)
+		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
 	req.Header.Set("User-Agent", "github.com/PaytonWebber/aoc-discord-bot by paytonwebber@gmail.com")
-
 	req.Header.Set("cookie", fmt.Sprintf("session=%s", c.SessionCookie))
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error reading response: %w", err)
+		return nil, fmt.Errorf("error making HTTP request: %w", err)
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("error reading body: %w", err)
+		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
 
 	var leaderboard Leaderboard
 	err = json.Unmarshal(body, &leaderboard)
 	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling body: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response body: %w", err)
 	}
 
 	return &leaderboard, nil
