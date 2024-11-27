@@ -54,6 +54,9 @@ func FormatLeaderboard(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
 }
 
 func FormatStars(leaderboard *aoc.Leaderboard) *discordgo.MessageEmbed {
+	if leaderboard == nil {
+		return nil
+	}
 
 	// Convert map to a slice for sorting
 	members := make([]aoc.Member, 0, len(leaderboard.Members))

@@ -73,7 +73,8 @@ func handleLeaderboardError(leaderboard *aoc.Leaderboard, err error) *aoc.Leader
 }
 
 func initTracker(cfg *config.Config, storedLeaderboard *aoc.Leaderboard) *leaderboard.Tracker {
-	tracker := leaderboard.NewTracker(cfg, storedLeaderboard)
+	client := aoc.NewClient(cfg.SessionCookie)
+	tracker := leaderboard.NewTracker(cfg, storedLeaderboard, client)
 	if tracker == nil {
 		log.Fatal("tracker is nil")
 	}
