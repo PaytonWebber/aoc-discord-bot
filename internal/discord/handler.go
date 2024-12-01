@@ -45,7 +45,7 @@ func (bh *BotHandler) CheckForUpdates() (bool, error) {
 	if len(newStars) > 0 {
 		log.Printf("new stars: %v", newStars)
 		for _, member := range newStars {
-			bh.SendChannelMessage(bh.cfg.ChannelID, member+" got a star!")
+			bh.SendChannelMessage(bh.cfg.ChannelID, member+" got a star! 🌟")
 		}
 	}
 
