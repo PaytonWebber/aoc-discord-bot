@@ -18,6 +18,7 @@
 		];
 
 	    shellHook = ''
+			kitty
 	    	echo "Entered Go Dev environment"
 		'';
 	};

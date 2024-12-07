@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/PaytonWebber/aoc-discord-bot/internal/aoc"
-	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
-	"github.com/PaytonWebber/aoc-discord-bot/internal/discord"
-	"github.com/PaytonWebber/aoc-discord-bot/internal/leaderboard"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/aoc"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/config"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/discord"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/leaderboard"
 
 	"log"
 	"os"

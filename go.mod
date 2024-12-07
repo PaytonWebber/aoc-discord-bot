@@ -1,4 +1,4 @@
-module github.com/PaytonWebber/aoc-discord-bot
+module github.com/Nebula5102/aoc-discord-bot-mk2
 
 go 1.20
 

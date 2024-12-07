@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/PaytonWebber/aoc-discord-bot/internal/aoc"
-	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/aoc"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

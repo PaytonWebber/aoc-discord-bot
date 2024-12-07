@@ -33,7 +33,7 @@ func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "github.com/PaytonWebber/aoc-discord-bot by paytonwebber@gmail.com")
+	req.Header.Set("User-Agent", "github.com/Nebula5102/aoc-discord-bot-mk2 by paytonwebber@gmail.com")
 	req.Header.Set("cookie", fmt.Sprintf("session=%s", c.SessionCookie))
 
 	resp, err := c.HTTPClient.Do(req)

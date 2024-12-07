@@ -1,8 +1,8 @@
 package discord
 
 import (
-	"github.com/PaytonWebber/aoc-discord-bot/internal/config"
-	"github.com/PaytonWebber/aoc-discord-bot/internal/leaderboard"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/config"
+	"github.com/Nebula5102/aoc-discord-bot-mk2/internal/leaderboard"
 	"github.com/bwmarrin/discordgo"
 
 	"log"
