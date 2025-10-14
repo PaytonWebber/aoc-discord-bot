@@ -37,6 +37,10 @@ func loadConfig() *config.Config {
 	if cfg == nil {
 		log.Fatal("cfg is nil")
 	}
+	if err := cfg.Validate(); err != nil {
+		log.Fatalf("configuration validation failed: %v", err)
+	}
+	log.Printf("Using Advent of Code year: %d", cfg.AOCYear)
 	return cfg
 }
 
@@ -57,7 +61,7 @@ func getLeaderboard(cfg *config.Config) *aoc.Leaderboard {
 	if err != nil || file == nil {
 		log.Printf("error opening leaderboard file: %v", err)
 		log.Printf("getting leaderboard from AoC")
-		client := aoc.NewClient(cfg.SessionCookie)
+		client := aoc.NewClient(cfg.SessionCookie, cfg.AOCYear)
 		storedLeaderboard, err := client.GetLeaderboard(cfg.LeaderboardID)
 		return handleLeaderboardError(storedLeaderboard, err)
 	}
@@ -73,7 +77,7 @@ func handleLeaderboardError(leaderboard *aoc.Leaderboard, err error) *aoc.Leader
 }
 
 func initTracker(cfg *config.Config, storedLeaderboard *aoc.Leaderboard) *leaderboard.Tracker {
-	client := aoc.NewClient(cfg.SessionCookie)
+	client := aoc.NewClient(cfg.SessionCookie, cfg.AOCYear)
 	tracker := leaderboard.NewTracker(cfg, storedLeaderboard, client)
 	if tracker == nil {
 		log.Fatal("tracker is nil")

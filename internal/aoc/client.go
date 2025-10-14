@@ -10,13 +10,15 @@ import (
 type Client struct {
 	SessionCookie string
 	HTTPClient    *http.Client
+	Year          int
 }
 
-// NewClient creates a new AOC client with the provided session cookie.
-func NewClient(sessionCookie string) *Client {
+// NewClient creates a new AOC client with the provided session cookie and year.
+func NewClient(sessionCookie string, year int) *Client {
 	return &Client{
 		SessionCookie: sessionCookie,
 		HTTPClient:    http.DefaultClient,
+		Year:          year,
 	}
 }
 
@@ -26,7 +28,7 @@ func (c *Client) SetHTTPClient(client *http.Client) {
 }
 
 func (c *Client) GetLeaderboard(leaderboardID string) (*Leaderboard, error) {
-	url := fmt.Sprintf("https://adventofcode.com/2024/leaderboard/private/view/%s.json", leaderboardID)
+	url := fmt.Sprintf("https://adventofcode.com/%d/leaderboard/private/view/%s.json", c.Year, leaderboardID)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
