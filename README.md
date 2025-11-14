@@ -74,7 +74,10 @@ Make sure to enable **MESSAGE CONTENT INTENT** for the bot:
    LEADERBOARD_ID="<YOUR LEADERBOARD ID>"
    DISCORD_TOKEN="<YOUR BOT's TOKEN>"
    CHANNEL_ID="<THE CHANNEL YOU WANT THE BOT TO MONITOR>"
+   AOC_YEAR="<OPTIONAL: YEAR TO TRACK (defaults to current year)>"
    ```
+
+   **Note:** The `AOC_YEAR` variable is optional and defaults to the current year. You can set it to any year from 2015 onwards to track a specific Advent of Code event.
 
 4. Build the project
 

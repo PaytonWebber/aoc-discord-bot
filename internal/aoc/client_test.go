@@ -51,7 +51,7 @@ func TestGetLeaderboardSuccess(t *testing.T) {
 	}))
 	defer mockServer.Close()
 
-	client := NewClient("test-session-cookie")
+	client := NewClient("test-session-cookie", 2024)
 	// Inject mock HTTP client
 	client.SetHTTPClient(mockServer.Client())
 
@@ -110,7 +110,7 @@ func TestGetLeaderboardInvalidSession(t *testing.T) {
 	}))
 	defer mockServer.Close()
 
-	client := NewClient("invalid-session-cookie")
+	client := NewClient("invalid-session-cookie", 2024)
 	client.SetHTTPClient(mockServer.Client())
 
 	// Override the request URL
@@ -133,7 +133,7 @@ func TestGetLeaderboardInvalidJSON(t *testing.T) {
 	}))
 	defer mockServer.Close()
 
-	client := NewClient("test-session-cookie")
+	client := NewClient("test-session-cookie", 2024)
 	client.SetHTTPClient(mockServer.Client())
 
 	// Override the request URL
